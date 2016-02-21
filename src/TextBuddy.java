@@ -6,6 +6,7 @@ public class TextBuddy {
 
 	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %1$s is ready for use";
 	private static final String MESSAGE_NO_FILE_ERROR = "Pls specify a file name for program to run and work on.";
+	private static final String MESSAGE_COMMAND = "command: ";
 	private static String _fileName;
 	private static File _userFile;
 
@@ -34,13 +35,13 @@ public class TextBuddy {
 	}
 
 	public static void setFileName(String[] args) {
-		_fileName = args[0];	
+		_fileName = args[0];
 	}
-	
+
 	public static void initialiseProg(File userfile) {
 		userfile = openFile();
 	}
-		
+
 	private static File openFile() {
 		File file = new File(_fileName);
 		try {
@@ -56,16 +57,23 @@ public class TextBuddy {
 	public static void printFeedback(String message) {
 		System.out.println(message);
 	}
-	
+
 	public static void executeProg() {
 		Scanner sc = new Scanner(System.in);
 		String commandLine;
+		Command cmd;
 		do {
-			System.out.print("command: ");
+			printFeedback(MESSAGE_COMMAND);
 			commandLine = sc.nextLine();
-			constructCmdObj();
-			
-		
+			cmd = constructCmdObj(commandLine);
+			cmd.executeCommand();
+		} while (!commandLine.equals("exit"));
+		sc.close();
 	}
-}
 
+	private static Command constructCmdObj(String commandLine) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
