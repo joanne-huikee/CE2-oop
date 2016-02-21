@@ -1,45 +1,48 @@
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Vector;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class TextBuddy {
 
 	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %1$s is ready for use";
-	private static final String MESSAGE_INVALID_COMMAND = "This is an invalid command. Pls re-enter command.";
-	private static final String MESSAGE_ADD = "added to %1$s: \"%2$s\"";
-	private static final String MESSAGE_EMPTY_FILE = "%1$s is empty. Nothing to be displayed";
-	private static final String MESSAGE_ERROR = "Error occurred while processing file.";
-	private static final String MESSAGE_PRINT = "%1$s. %2$s";
-	private static final String MESSAGE_EMPTY_DELETION = "Invalid command. %1$s is empty. Nothing to be deleted.";
-	private static final String MESSAGE_DELETE = "deleted from %1$s: \"%2$s\"";
-	private static final String MESSAGE_INVALID_DELETE = "Invalid command. There is no line %1$s for deletion";
-	private static final String MESSAGE_CLEAR = "all content deleted from %1$s";
-	private static final String MESSAGE_SORT = "%1$s has been sorted alphabetically";
-	private static final String COMMAND_ADD = "add";
-	private static final String COMMAND_DISPLAY = "display";
-	private static final String COMMAND_DELETE = "delete";
-	private static final String COMMAND_CLEAR = "clear";
-	private static final String COMMAND_SORT = "sort";
-	private static final String COMMAND_SEARCH = "search";
-	private static final String COMMAND_EXIT = "exit";
+	private static final String MESSAGE_NO_FILE_ERROR = "Pls specify a file name for program to run and work on.";
+	private static String _fileName;
+	private static File _userFile;
 
 	public static void main(String args[]) {
-		String fileName = "haha.txt";
-		File userFile = openFile(fileName);
-		showSystemGreeting(MESSAGE_WELCOME, fileName);
-		processCommand(userFile);
+		checkForValidArg(args);
+		initialiseProg(_userFile);
+		printFeedback(String.format(MESSAGE_WELCOME, _fileName));
+		executeProg();
 	}
 
-	private static File openFile(String fileName) {
-		File file = new File(fileName);
+	public static void checkForValidArg(String[] args) {
+		if (isNullArg(args)) {
+			printFeedback(MESSAGE_NO_FILE_ERROR);
+			System.exit(0);
+		} else {
+			setFileName(args);
+		}
+	}
+
+	public static boolean isNullArg(String[] args) {
+		if (args.length == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static void setFileName(String[] args) {
+		_fileName = args[0];	
+	}
+	
+	public static void initialiseProg(File userfile) {
+		userfile = openFile();
+	}
+		
+	private static File openFile() {
+		File file = new File(_fileName);
 		try {
 			if (!file.exists()) {
 				file.createNewFile();
@@ -50,264 +53,19 @@ public class TextBuddy {
 		return file;
 	}
 
-	private static void processCommand(File userFile) {
+	public static void printFeedback(String message) {
+		System.out.println(message);
+	}
+	
+	public static void executeProg() {
 		Scanner sc = new Scanner(System.in);
-		String commandLine, commandKey;
-
+		String commandLine;
 		do {
 			System.out.print("command: ");
 			commandLine = sc.nextLine();
-			commandKey = getActionWord(commandLine);
-			executeCommand(commandKey, commandLine, userFile);
-		} while (!commandKey.equals("exit"));
-		sc.close();
-	}
-
-	private static void showSystemGreeting(String message, String fileName) {
-		System.out.println(String.format(message, fileName));
-	}
-
-	private static String getActionWord(String commandLine) {
-		String[] tokens = commandLine.split("\\s");
-		StringBuilder sb = new StringBuilder();
-		sb.insert(0, tokens[0]);
-		return sb.toString();
-	}
-
-	private static void executeCommand(String commandKey, String commandLine, File userFile) {
-		switch (commandKey) {
-		case COMMAND_ADD:
-			add(commandLine, userFile);
-			break;
-		case COMMAND_DISPLAY:
-			display(userFile);
-			break;
-		case COMMAND_DELETE:
-			delete(commandLine, userFile);
-			break;
-		case COMMAND_CLEAR:
-			clear(userFile);
-			break;
-		case COMMAND_SORT:
-			sortAlpha(userFile);
-			break;
-		case COMMAND_SEARCH:
-			search(commandLine, userFile);
-			break;
-		case COMMAND_EXIT:
-			exit();
-		default:
-			showFeedbackMsg(MESSAGE_INVALID_COMMAND);
-		}
-		return;
-	}
-
-	private static void showFeedbackMsg(String message) {
-		System.out.println(message);
-	}
-
-	private static void add(String commandLine, File userFile) {
-		String message = getMessage(commandLine);
-		writeToFile(userFile, message);
-		showFeedbackMsg(String.format(MESSAGE_ADD, userFile.getName(), message));
-	}
-
-	private static void writeToFile(File userFile, String message) {
-		try {
-			FileWriter fw = new FileWriter(userFile, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.append(message).append("\n").toString();
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static String getMessage(String commandLine) {
-		String message = commandLine.replace(getActionWord(commandLine), " ");
-		return message.trim();
-	}
-
-	private static void display(File userFile) {
-		String line = null;
-		int lineNum = 0;
-		if (isEmpty(userFile)) {
-			showFeedbackMsg(String.format(MESSAGE_EMPTY_FILE, userFile.getName()));
-		} else {
-			readAndOutputFile(userFile, line, lineNum);
-		}
-	}
-
-	private static void readAndOutputFile(File userFile, String line, int lineNum) {
-		try {
-			FileReader fr = new FileReader(userFile);
-			BufferedReader br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
-				lineNum++;
-				showFeedbackMsg(String.format(MESSAGE_PRINT, lineNum, line));
-			}
-			br.close();
-		} catch (FileNotFoundException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		} catch (IOException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		}
-	}
-
-	private static boolean isEmpty(File userFile) {
-		return userFile.length() <= 0;
-	}
-
-	private static void delete(String commandLine, File userFile) {
-		Vector<String> temp = new Vector<String>();
-		extractLineForDelete(temp, commandLine, userFile);
-		emptyFile(userFile);
-		appendBackNonDeleted(temp, userFile);
-	}
-
-	private static void extractLineForDelete(Vector<String> temp, String commandLine, File userFile) {
-		int x = getDeletedLineNum(commandLine);
-		if (isEmpty(userFile)) {
-			showFeedbackMsg(String.format(MESSAGE_EMPTY_DELETION, userFile.getName()));
-		} else {
-			searchAndStore(temp, userFile, x);
-		}
-	}
-
-	private static int getDeletedLineNum(String commandLine) {
-		try {
-			return Integer.parseInt(commandLine.replaceAll("\\D+", ""));
-		} catch (NumberFormatException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		}
-		return -1;
-	}
-
-	private static void searchAndStore(Vector<String> temp, File userFile, int x) {
-		String line = null;
-		int lineNum = 1;
-		try {
-			FileReader fr = new FileReader(userFile);
-			BufferedReader br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
-				if (lineNum == x) {
-					showFeedbackMsg(String.format(MESSAGE_DELETE, userFile.getName(), line));
-				} else {
-					storeToTemp(temp, line);
-				}
-				lineNum++;
-			}
-			br.close();
-			if (x >= (lineNum) || x == 0) {
-				showFeedbackMsg(String.format(MESSAGE_INVALID_DELETE, x));
-			}
-		} catch (FileNotFoundException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		} catch (IOException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		}
-	}
-
-	private static void storeToTemp(Vector<String> temp, String line) {
-		temp.add(line);
-	}
-
-	private static void appendBackNonDeleted(Vector<String> temp, File userFile) {
-		Iterator<String> i = temp.iterator();
-		try {
-			FileWriter fw = new FileWriter(userFile, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			while (i.hasNext()) {
-				bw.append(i.next()).append("\n").toString();
-			}
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void clear(File userFile) {
-		emptyFile(userFile);
-		showFeedbackMsg(String.format(MESSAGE_CLEAR, userFile.getName()));
-	}
-
-	private static void emptyFile(File userFile) {
-		try {
-			FileWriter fw = new FileWriter(userFile, false);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.flush();
-			bw.close();
-		} catch (IOException e) {
-			showFeedbackMsg(MESSAGE_ERROR);
-			e.printStackTrace();
-		}
-	}
-
-	private static void sortAlpha(File userFile) {
-		String line = null;
-		Vector<String> temp = new Vector<String>();
-		try {
-			FileReader fr = new FileReader(userFile);
-			BufferedReader br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
-				storeToTemp(temp, line);
-			}
-			br.close();
-		} catch (FileNotFoundException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		} catch (IOException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		}
-		Collections.sort(temp);
-		emptyFile(userFile);
-		appendBackNonDeleted(temp, userFile);
-		showFeedbackMsg(String.format(MESSAGE_SORT, userFile.getName()));
-	}
-
-	private static void search(String commandLine, File userFile) {
-		Vector<String> temp = new Vector<String>();
-		String searchInput = getWordForSearch(commandLine);
-		findAndStore(searchInput, temp, userFile);
-		printSearchedLine(temp);
-	}
-
-	private static String getWordForSearch(String commandLine) {
-		String searchInput = commandLine.replace(getActionWord(commandLine), " ");
-		return searchInput.trim();
-	}
-
-	private static void findAndStore(String searchInput, Vector<String> temp, File userFile) {
-		String line = null;
-		int lineNum = 0;
-		try {
-			FileReader fr = new FileReader(userFile);
-			BufferedReader br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
-				lineNum++;
-				if (line.contains(searchInput)) {
-					storeToTemp(temp, lineNum + ". " + line);
-				}
-			}
-			br.close();
-		} catch (FileNotFoundException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		} catch (IOException ex) {
-			showFeedbackMsg(MESSAGE_ERROR);
-		}
-	}
-
-	private static void printSearchedLine(Vector<String> temp) {
-		Iterator<String> i = temp.iterator();
-		if (temp.isEmpty()) {
-			System.out.println("No match found for search");
-		} else {
-			while (i.hasNext()) {
-				System.out.println(i.next().toString());
-			}
-		}
-	}
-
-	private static void exit() {
-		System.exit(0);
+			constructCmdObj();
+			
+		
 	}
 }
+
