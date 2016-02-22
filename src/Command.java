@@ -2,8 +2,10 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Vector;
 
-/** This class is used to process and execute user's command. Most of the methods return 
- 	string or boolean for the ease of unit testing lolol */
+/**
+ * This class is used to process and execute user's command. Most of the methods
+ * return string or boolean for the ease of unit testing lolol
+ */
 
 public class Command {
 
@@ -18,6 +20,7 @@ public class Command {
 	private static final String MESSAGE_DELETE = "Deleted from %1$s: \"%2$s\"";
 	private static final String MESSAGE_CLEAR = "All content deleted from %1$s";
 	private static final String MESSAGE_SORT = "%1$s has been sorted alphabetically";
+	private static final String MESSAGE_EMPTY_SORT = "File is empty. No content to be sorted";
 	private static final String MESSAGE_SEARCH_NO_MATCH = "No match found for search";
 	private static final String MESSAGE_SEARCH = "The above are all the lines found containing searched word";
 	private static final String COMMAND_ADD = "add";
@@ -28,16 +31,19 @@ public class Command {
 	private static final String COMMAND_SEARCH = "search";
 	private static final String COMMAND_EXIT = "exit";
 
-/** Private attributes of Command class. Every Command object has a task description and 
- * 	FileEditor to manipulate the textfile according to the command specified   */
-	
+	/**
+	 * Private attributes of Command class. Every Command object has a task
+	 * description and FileEditor to manipulate the textfile according to the
+	 * command specified
+	 */
+
 	private String _description;
 	private FileEditor _myEditor;
-	
- /*************************************************************************************/
-	
+
+	/*************************************************************************************/
+
 	public Command(String cmd) {
-		_description = cmd;        //constructor of Command class
+		_description = cmd; // constructor of Command class
 	}
 
 	public void executeCommand() {
@@ -45,13 +51,18 @@ public class Command {
 		processCommand(cmdKey);
 	}
 
-	public String getActionWord() {    //this method extracts the command word from user input ignoring trailing & leading whitespaces
+	public String getActionWord() { // this method extracts the command word
+									// from user input ignoring trailing &
+									// leading whitespaces
 		String[] tokens = _description.trim().split("\\s");
 		StringBuilder sb = new StringBuilder();
 		return sb.insert(0, tokens[0]).toString();
 	}
 
-	public void processCommand(String cmdKey) {  //This method matches the userinput w the predefined system fn and execute it w respective feedback returned
+	public void processCommand(String cmdKey) { // This method matches the
+												// userinput w the predefined
+												// system fn and execute it w
+												// respective feedback returned
 		switch (cmdKey) {
 		case COMMAND_ADD:
 			String feedbackOfAdd = executeAdd();
@@ -164,8 +175,12 @@ public class Command {
 
 	public String executeSort() {
 		_myEditor = new FileEditor(TextBuddy.getUserFile());
-		_myEditor.sortAlpha();
-		return String.format(MESSAGE_SORT, TextBuddy.getFileName());
+		if (isEmpty(TextBuddy.getUserFile())) {
+			return MESSAGE_EMPTY_SORT;
+		} else {
+			_myEditor.sortAlpha();
+			return String.format(MESSAGE_SORT, TextBuddy.getFileName());
+		}
 	}
 
 	public String executeSearch() {
