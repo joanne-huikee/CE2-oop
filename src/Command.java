@@ -12,10 +12,12 @@ public class Command {
 	private static final String MESSAGE_ADD = "added to %1$s: \"%2$s\"";
 	private static final String MESSAGE_DELETE = "deleted from %1$s: \"%2$s\"";
 	private static final String MESSAGE_CLEAR = "all content deleted from %1$s";
+	private static final String MESSAGE_SORT = "%1$s has been sorted alphabetically";
 	private static final String COMMAND_ADD = "add";
 	private static final String COMMAND_DISPLAY = "display";
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_CLEAR = "clear";
+	private static final String COMMAND_SORT = "sort";
 	private static final String COMMAND_EXIT = "exit";
 
 	private String description;
@@ -52,6 +54,10 @@ public class Command {
 		case COMMAND_CLEAR:
 			String feedbackOfClr = executeClear();
 			TextBuddy.printFeedback(feedbackOfClr);
+			break;
+		case COMMAND_SORT:
+			String feedbackofSort = executeSort();
+			TextBuddy.printFeedback(feedbackofSort);
 			break;
 		case COMMAND_EXIT:
 			executeExit();
@@ -130,6 +136,12 @@ public class Command {
 		myEditor = new FileEditor(TextBuddy.getUserFile());
 		myEditor.clearFile();
 		return String.format(MESSAGE_CLEAR, TextBuddy.getFileName());
+	}
+	
+	public String executeSort() {
+		myEditor = new FileEditor(TextBuddy.getUserFile());
+		myEditor.sortAlpha();
+		return String.format(MESSAGE_SORT, TextBuddy.getFileName());
 	}
 	
 	public void executeExit() {

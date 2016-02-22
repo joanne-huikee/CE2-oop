@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -116,5 +117,11 @@ public class FileEditor {
 			TextBuddy.printFeedback(MESSAGE_ERROR);
 			e.printStackTrace();
 		}
+	}
+	
+	public void sortAlpha() {
+		Vector<String> storage = readAndStore();
+		Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
+		appendVectorToFile(storage);
 	}
 }

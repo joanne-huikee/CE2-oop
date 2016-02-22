@@ -11,6 +11,7 @@ public class TextBuddy {
 	
 	private static String _fileName;
 	private static File _userFile;
+	private static Command cmd;
 
 	public static void main(String args[]) {
 		checkForValidArg(args);
@@ -77,7 +78,7 @@ public class TextBuddy {
 		do {
 			printFeedbackNoNextLn(MESSAGE_COMMAND);
 			commandLine = sc.nextLine();
-			Command cmd = new Command(commandLine);
+			cmd = new Command(commandLine);
 			cmd.executeCommand();
 		} while (!commandLine.equals("exit"));
 	}
