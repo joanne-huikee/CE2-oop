@@ -14,32 +14,33 @@ import java.util.regex.Pattern;
 public class FileEditor {
 
 	private static final int COUNTER_START = 0;
+	private static final int EMPTY_FILE_COUNTER = 0;
 	private static final String MESSAGE_ERROR = "Error occurred while processing file.";
 	private static final String MESSAGE_EMPTY_FILE = "%1$s is empty. Nothing to be displayed";
 
-	private File userFile;
-	private FileWriter fw;
-	private BufferedWriter bw;
-	private FileReader fr;
-	private BufferedReader br;
+	private File _userFile;
+	private FileWriter _fw;
+	private BufferedWriter _bw;
+	private FileReader _fr;
+	private BufferedReader _br;
 
 	public FileEditor(File file) {
-		userFile = file;
+		_userFile = file;
 	}
 
 	public void write(String input) {
 		try {
-			fw = new FileWriter(userFile, true);
-			bw = new BufferedWriter(fw);
-			bw.append(input).append("\n").toString();
-			bw.close();
+			_fw = new FileWriter(_userFile, true);
+			_bw = new BufferedWriter(_fw);
+			_bw.append(input).append("\n").toString();
+			_bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void readAndPrint() {
-		if (userFile.length() <= 0) {
+		if (_userFile.length() <= EMPTY_FILE_COUNTER) {
 			TextBuddy.printFeedback(String.format(MESSAGE_EMPTY_FILE, TextBuddy.getFileName()));
 		} else {
 			outputFileContent();
@@ -50,10 +51,10 @@ public class FileEditor {
 		String line = null;
 		int lineNum = COUNTER_START;
 		try {
-			fr = new FileReader(userFile);
-			br = new BufferedReader(fr);
+			_fr = new FileReader(_userFile);
+			_br = new BufferedReader(_fr);
 			loopAndPrintLine(line, lineNum);
-			br.close();
+			_br.close();
 		} catch (FileNotFoundException ex) {
 			TextBuddy.printFeedback(MESSAGE_ERROR);
 		} catch (IOException ex) {
@@ -62,9 +63,9 @@ public class FileEditor {
 	}
 
 	private void loopAndPrintLine(String line, int lineNum) throws IOException {
-		while ((line = br.readLine()) != null) {
+		while ((line = _br.readLine()) != null) {
 			lineNum++;
-			System.out.println(lineNum + ". " + line);
+			TextBuddy.printFeedback(lineNum + ". " + line);
 		}
 	}
 
@@ -72,12 +73,12 @@ public class FileEditor {
 		Vector<String> temp = new Vector<String>();
 		String line = null;
 		try {
-			fr = new FileReader(userFile);
-			br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
+			_fr = new FileReader(_userFile);
+			_br = new BufferedReader(_fr);
+			while ((line = _br.readLine()) != null) {
 				storeToTemp(temp, line);
 			}
-			br.close();
+			_br.close();
 		} catch (FileNotFoundException ex) {
 			TextBuddy.printFeedback(MESSAGE_ERROR);
 		} catch (IOException ex) {
@@ -99,12 +100,12 @@ public class FileEditor {
 	public void appendVectorToFile(Vector<String> temp) {
 		Iterator<String> i = temp.iterator();
 		try {
-			fw = new FileWriter(userFile, false);
-			bw = new BufferedWriter(fw);
+			_fw = new FileWriter(_userFile, false);
+			_bw = new BufferedWriter(_fw);
 			while (i.hasNext()) {
-				bw.append(i.next()).append("\n").toString();
+				_bw.append(i.next()).append("\n").toString();
 			}
-			bw.close();
+			_bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,9 +113,9 @@ public class FileEditor {
 
 	public void clearFile() {
 		try {
-			fw = new FileWriter(userFile, false);
-			bw = new BufferedWriter(fw);
-			bw.close();
+			_fw = new FileWriter(_userFile, false);
+			_bw = new BufferedWriter(_fw);
+			_bw.close();
 		} catch (IOException e) {
 			TextBuddy.printFeedback(MESSAGE_ERROR);
 			e.printStackTrace();
@@ -132,10 +133,10 @@ public class FileEditor {
 		String line = null;
 		int lineNum = COUNTER_START;
 		try {
-			fr = new FileReader(userFile);
-			br = new BufferedReader(fr);
+			_fr = new FileReader(_userFile);
+			_br = new BufferedReader(_fr);
 			getLinesContainSearched(line, lineNum, temp, searchInput);
-			br.close();
+			_br.close();
 		} catch (FileNotFoundException ex) {
 			TextBuddy.printFeedback(MESSAGE_ERROR);
 		} catch (IOException ex) {
@@ -145,7 +146,7 @@ public class FileEditor {
 	}
 	
 	public void getLinesContainSearched(String line, int lineNum, Vector<String> temp, String searchInput) throws IOException {
-		while ((line = br.readLine()) != null) {
+		while ((line = _br.readLine()) != null) {
 			lineNum++;
 			if (Pattern.compile(Pattern.quote(searchInput), Pattern.CASE_INSENSITIVE).matcher(line).find()) {
 				storeToTemp(temp, lineNum + ". " + line);

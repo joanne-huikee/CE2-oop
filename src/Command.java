@@ -25,11 +25,11 @@ public class Command {
 	private static final String COMMAND_SEARCH = "search";
 	private static final String COMMAND_EXIT = "exit";
 
-	private String description;
-	private FileEditor myEditor;
+	private String _description;
+	private FileEditor _myEditor;
 
 	public Command(String cmd) {
-		description = cmd;
+		_description = cmd;
 	}
 
 	public void executeCommand() {
@@ -38,7 +38,7 @@ public class Command {
 	}
 
 	public String getActionWord() {
-		String[] tokens = description.trim().split("\\s");
+		String[] tokens = _description.trim().split("\\s");
 		StringBuilder sb = new StringBuilder();
 		return sb.insert(0, tokens[0]).toString();
 	}
@@ -78,13 +78,13 @@ public class Command {
 
 	public String executeAdd() {
 		String userInput = getInputMsg();
-		myEditor = new FileEditor(TextBuddy.getUserFile());
-		String feedbackMsg = checkValidAddition(myEditor, userInput);
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
+		String feedbackMsg = checkValidAddition(_myEditor, userInput);
 		return feedbackMsg;
 	}
 
 	public String getInputMsg() {
-		String message = description.replace(getActionWord(), " ");
+		String message = _description.replace(getActionWord(), " ");
 		return message.trim();
 	}
 
@@ -98,15 +98,15 @@ public class Command {
 	}
 
 	private boolean executeDisplay() {
-		myEditor = new FileEditor(TextBuddy.getUserFile());
-		myEditor.readAndPrint();
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
+		_myEditor.readAndPrint();
 		return true;
 	}
 
 	public String executeDelete() {
-		myEditor = new FileEditor(TextBuddy.getUserFile());
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
 		int x = getLineNumForDel();
-		String feedbackMsg = checkValidDel(myEditor, x);
+		String feedbackMsg = checkValidDel(_myEditor, x);
 		return feedbackMsg;
 	}
 
@@ -149,21 +149,21 @@ public class Command {
 	}
 
 	public String executeClear() {
-		myEditor = new FileEditor(TextBuddy.getUserFile());
-		myEditor.clearFile();
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
+		_myEditor.clearFile();
 		return String.format(MESSAGE_CLEAR, TextBuddy.getFileName());
 	}
 
 	public String executeSort() {
-		myEditor = new FileEditor(TextBuddy.getUserFile());
-		myEditor.sortAlpha();
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
+		_myEditor.sortAlpha();
 		return String.format(MESSAGE_SORT, TextBuddy.getFileName());
 	}
 
 	public String executeSearch() {
 		String searchInput = getInputMsg();
-		myEditor = new FileEditor(TextBuddy.getUserFile());
-		Vector<String> storage = myEditor.findAndStore(searchInput);
+		_myEditor = new FileEditor(TextBuddy.getUserFile());
+		Vector<String> storage = _myEditor.findAndStore(searchInput);
 		printMatchingSearch(storage);
 		return MESSAGE_SEARCH;
 	}
@@ -171,10 +171,10 @@ public class Command {
 	public void printMatchingSearch(Vector<String> storage) {
 		Iterator<String> i = storage.iterator();
 		if (storage.isEmpty()) {
-			System.out.println(MESSAGE_SEARCH_NO_MATCH);
+			TextBuddy.printFeedback(MESSAGE_SEARCH_NO_MATCH);
 		} else {
 			while (i.hasNext()) {
-				System.out.println(i.next());
+				TextBuddy.printFeedback(i.next());
 			}
 		}
 	}
