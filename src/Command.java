@@ -79,7 +79,7 @@ public class Command {
 	public String executeAdd() {
 		String userInput = getInputMsg();
 		_myEditor = new FileEditor(TextBuddy.getUserFile());
-		String feedbackMsg = checkValidAddition(_myEditor, userInput);
+		String feedbackMsg = checkValidAddition(userInput);
 		return feedbackMsg;
 	}
 
@@ -88,11 +88,11 @@ public class Command {
 		return message.trim();
 	}
 
-	public String checkValidAddition(FileEditor myEditor, String userInput) {
+	public String checkValidAddition(String userInput) {
 		if (userInput.isEmpty()) {
 			return MESSAGE_EMPTY_ADD;
 		} else {
-			myEditor.write(userInput);
+			_myEditor.write(userInput);
 			return String.format(MESSAGE_ADD, TextBuddy.getFileName(), userInput);
 		}
 	}
@@ -106,7 +106,7 @@ public class Command {
 	public String executeDelete() {
 		_myEditor = new FileEditor(TextBuddy.getUserFile());
 		int x = getLineNumForDel();
-		String feedbackMsg = checkValidDel(_myEditor, x);
+		String feedbackMsg = checkValidDel(x);
 		return feedbackMsg;
 	}
 
@@ -121,12 +121,12 @@ public class Command {
 		return -1;
 	}
 
-	public String checkValidDel(FileEditor myEditor, int num) {
+	public String checkValidDel(int num) {
 		if (isEmpty(TextBuddy.getUserFile())) {
 			return String.format(MESSAGE_EMPTY_DELETION, TextBuddy.getFileName());
 		} else {
-			Vector<String> storage = myEditor.readAndStore();
-			return checkDelLineExist(myEditor, storage, num);
+			Vector<String> storage = _myEditor.readAndStore();
+			return checkDelLineExist(storage, num);
 		}
 	}
 
@@ -134,12 +134,12 @@ public class Command {
 		return userFile.length() <= EMPTY_FILE_COUNTER;
 	}
 
-	public String checkDelLineExist(FileEditor myEditor, Vector<String> storage, int num) {
+	public String checkDelLineExist(Vector<String> storage, int num) {
 		if (isInvalidDel(storage, num)) {
 			return MESSAGE_INVALID_DELETE;
 		} else {
-			String delLine = myEditor.deleteLine(storage, num);
-			myEditor.appendVectorToFile(storage);
+			String delLine = _myEditor.deleteLine(storage, num);
+			_myEditor.appendVectorToFile(storage);
 			return String.format(MESSAGE_DELETE, TextBuddy.getFileName(), delLine);
 		}
 	}
