@@ -12,17 +12,23 @@ public class TextBuddy {
 
 	public static void main(String args[]) {
 		checkForValidArg(args);
-		initialiseProg(_userFile);
+		initialiseProg(args, _userFile);
 		printFeedback(String.format(MESSAGE_WELCOME, _fileName));
 		executeProg();
 	}
-
+	
+	public static String getFileName() {
+		return _fileName;
+	}
+	
+	public static File getUserFile(){
+		return _userFile;
+	}
+	
 	public static void checkForValidArg(String[] args) {
 		if (isNullArg(args)) {
 			printFeedback(MESSAGE_NO_FILE_ERROR);
 			System.exit(0);
-		} else {
-			setFileName(args);
 		}
 	}
 
@@ -34,24 +40,24 @@ public class TextBuddy {
 		}
 	}
 
+	public static void initialiseProg(String[] args, File userfile) {
+		setFileName(args);
+		openFile();
+	}
+
 	public static void setFileName(String[] args) {
 		_fileName = args[0];
 	}
-
-	public static void initialiseProg(File userfile) {
-		userfile = openFile();
-	}
-
-	private static File openFile() {
-		File file = new File(_fileName);
+	
+	private static void openFile() {
+		_userFile = new File(_fileName);
 		try {
-			if (!file.exists()) {
-				file.createNewFile();
+			if (!_userFile.exists()) {
+				_userFile.createNewFile();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return file;
 	}
 
 	public static void printFeedback(String message) {
@@ -61,19 +67,16 @@ public class TextBuddy {
 	public static void executeProg() {
 		Scanner sc = new Scanner(System.in);
 		String commandLine;
-		Command cmd;
 		do {
-			printFeedback(MESSAGE_COMMAND);
+			printFeedbackNoNextLn(MESSAGE_COMMAND);
 			commandLine = sc.nextLine();
-			cmd = constructCmdObj(commandLine);
+			Command cmd = new Command(commandLine);
 			cmd.executeCommand();
 		} while (!commandLine.equals("exit"));
 		sc.close();
 	}
 
-	private static Command constructCmdObj(String commandLine) {
-		// TODO Auto-generated method stub
-		return null;
+	private static void printFeedbackNoNextLn(String message) {
+		System.out.print(message);
 	}
-	
 }
