@@ -2,6 +2,9 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Vector;
 
+/** This class is used to process and execute user's command. Most of the methods return 
+ 	string or boolean for the ease of unit testing lolol */
+
 public class Command {
 
 	private static final int EMPTY_FILE_COUNTER = 0;
@@ -25,11 +28,16 @@ public class Command {
 	private static final String COMMAND_SEARCH = "search";
 	private static final String COMMAND_EXIT = "exit";
 
+/** Private attributes of Command class. Every Command object has a task description and 
+ * 	FileEditor to manipulate the textfile according to the command specified   */
+	
 	private String _description;
 	private FileEditor _myEditor;
-
+	
+ /*************************************************************************************/
+	
 	public Command(String cmd) {
-		_description = cmd;
+		_description = cmd;        //constructor of Command class
 	}
 
 	public void executeCommand() {
@@ -37,13 +45,13 @@ public class Command {
 		processCommand(cmdKey);
 	}
 
-	public String getActionWord() {
+	public String getActionWord() {    //this method extracts the command word from user input ignoring trailing & leading whitespaces
 		String[] tokens = _description.trim().split("\\s");
 		StringBuilder sb = new StringBuilder();
 		return sb.insert(0, tokens[0]).toString();
 	}
 
-	public void processCommand(String cmdKey) {
+	public void processCommand(String cmdKey) {  //This method matches the userinput w the predefined system fn and execute it w respective feedback returned
 		switch (cmdKey) {
 		case COMMAND_ADD:
 			String feedbackOfAdd = executeAdd();
