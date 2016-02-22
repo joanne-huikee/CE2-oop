@@ -4,9 +4,11 @@ import java.util.Scanner;
 
 public class TextBuddy {
 
+	private static final int ARGS_PARAM = 0;
 	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %1$s is ready for use";
 	private static final String MESSAGE_NO_FILE_ERROR = "Pls specify a file name for program to run and work on.";
 	private static final String MESSAGE_COMMAND = "command: ";
+	
 	private static String _fileName;
 	private static File _userFile;
 
@@ -28,7 +30,7 @@ public class TextBuddy {
 	public static void checkForValidArg(String[] args) {
 		if (isNullArg(args)) {
 			printFeedback(MESSAGE_NO_FILE_ERROR);
-			System.exit(0);
+			System.exit(ARGS_PARAM);
 		}
 	}
 
@@ -46,7 +48,7 @@ public class TextBuddy {
 	}
 
 	public static void setFileName(String[] args) {
-		_fileName = args[0];
+		_fileName = args[ARGS_PARAM];
 	}
 	
 	private static void openFile() {
@@ -66,17 +68,21 @@ public class TextBuddy {
 
 	public static void executeProg() {
 		Scanner sc = new Scanner(System.in);
-		String commandLine;
+		String commandLine = null;
+		loopPromptTilExit(sc, commandLine);
+		sc.close();
+	}
+
+	public static void loopPromptTilExit(Scanner sc, String commandLine) {
 		do {
 			printFeedbackNoNextLn(MESSAGE_COMMAND);
 			commandLine = sc.nextLine();
 			Command cmd = new Command(commandLine);
 			cmd.executeCommand();
 		} while (!commandLine.equals("exit"));
-		sc.close();
 	}
 
-	private static void printFeedbackNoNextLn(String message) {
+	public static void printFeedbackNoNextLn(String message) {
 		System.out.print(message);
 	}
 }
