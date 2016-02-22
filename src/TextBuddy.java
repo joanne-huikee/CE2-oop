@@ -90,7 +90,7 @@ public class TextBuddy {
 		_fileName = args[ARGS_PARAM];
 	}
 
-	private static void openFile() {
+	public static void openFile() {
 		_userFile = new File(_fileName);
 		try {
 			if (!_userFile.exists()) {
