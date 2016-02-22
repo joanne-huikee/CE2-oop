@@ -7,6 +7,7 @@ public class Command {
 	private static final int EMPTY_FILE_COUNTER = 0;
 	private static final int ARGS_PARAM = 0;
 	private static final String MESSAGE_INVALID_COMMAND = "This is an invalid command. Pls re-enter command.";
+	private static final String MESSAGE_EMPTY_ADD = "Invalid command. Nothing specified for addition";
 	private static final String MESSAGE_NUM_ERROR = "An invalid number format was specified. Fail to process";
 	private static final String MESSAGE_EMPTY_DELETION = "Invalid command. %1$s is empty. Nothing to be deleted.";
 	private static final String MESSAGE_INVALID_DELETE = "Invalid command. Line number as specified does not exist for deletion";
@@ -77,16 +78,23 @@ public class Command {
 
 	public String executeAdd() {
 		String userInput = getInputMsg();
-		myEditor = new FileEditor(TextBuddy.getUserFile()); // check for valid
-															// add aka dont add
-															// nth
-		myEditor.write(userInput);
-		return String.format(MESSAGE_ADD, TextBuddy.getFileName(), userInput);
+		myEditor = new FileEditor(TextBuddy.getUserFile());
+		String feedbackMsg = checkValidAddition(myEditor, userInput);
+		return feedbackMsg;
 	}
 
 	public String getInputMsg() {
 		String message = description.replace(getActionWord(), " ");
 		return message.trim();
+	}
+
+	public String checkValidAddition(FileEditor myEditor, String userInput) {
+		if (userInput.isEmpty()) {
+			return MESSAGE_EMPTY_ADD;
+		} else {
+			myEditor.write(userInput);
+			return String.format(MESSAGE_ADD, TextBuddy.getFileName(), userInput);
+		}
 	}
 
 	private boolean executeDisplay() {
