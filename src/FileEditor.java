@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.regex.Pattern;
+
 
 public class FileEditor {
 
@@ -65,7 +67,7 @@ public class FileEditor {
 			System.out.println(lineNum + ". " + line);
 		}
 	}
-	
+
 	public Vector<String> readAndStore() {
 		Vector<String> temp = new Vector<String>();
 		String line = null;
@@ -83,7 +85,7 @@ public class FileEditor {
 		}
 		return temp;
 	}
-	
+
 	public void storeToTemp(Vector<String> temp, String line) {
 		temp.add(line);
 	}
@@ -93,7 +95,7 @@ public class FileEditor {
 		temp.remove(num - 1);
 		return deletedLine;
 	}
-	
+
 	public void appendVectorToFile(Vector<String> temp) {
 		Iterator<String> i = temp.iterator();
 		try {
@@ -107,7 +109,7 @@ public class FileEditor {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void clearFile() {
 		try {
 			fw = new FileWriter(userFile, false);
@@ -118,10 +120,36 @@ public class FileEditor {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sortAlpha() {
 		Vector<String> storage = readAndStore();
 		Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
 		appendVectorToFile(storage);
+	}
+
+	public Vector<String> findAndStore(String searchInput) {
+		Vector<String> temp = new Vector<String>();
+		String line = null;
+		int lineNum = COUNTER_START;
+		try {
+			fr = new FileReader(userFile);
+			br = new BufferedReader(fr);
+			getLinesContainSearched(line, lineNum, temp, searchInput);
+			br.close();
+		} catch (FileNotFoundException ex) {
+			TextBuddy.printFeedback(MESSAGE_ERROR);
+		} catch (IOException ex) {
+			TextBuddy.printFeedback(MESSAGE_ERROR);
+		}
+		return temp;
+	}
+	
+	public void getLinesContainSearched(String line, int lineNum, Vector<String> temp, String searchInput) throws IOException {
+		while ((line = br.readLine()) != null) {
+			lineNum++;
+			if (Pattern.compile(Pattern.quote(searchInput), Pattern.CASE_INSENSITIVE).matcher(line).find()) {
+				storeToTemp(temp, lineNum + ". " + line);
+			}
+		}
 	}
 }
