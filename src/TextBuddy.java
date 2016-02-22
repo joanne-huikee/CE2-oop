@@ -116,8 +116,7 @@ public class TextBuddy {
 		do {
 			printFeedbackNoNextLn(MESSAGE_COMMAND);
 			commandLine = sc.nextLine();
-			cmd = new Command(commandLine); // construct Command class object to
-											// process command
+			cmd = new Command(commandLine); // construct Command class object to process command
 			cmd.executeCommand();
 		} while (!commandLine.equals("exit"));
 	}

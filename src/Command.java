@@ -43,7 +43,7 @@ public class Command {
 	/*************************************************************************************/
 
 	public Command(String cmd) {
-		_description = cmd; // constructor of Command class
+		_description = cmd;  // constructor of Command class
 	}
 
 	public void executeCommand() {
@@ -51,17 +51,14 @@ public class Command {
 		processCommand(cmdKey);
 	}
 
-	public String getActionWord() { // this method extracts the command word
-									// from user input ignoring trailing &
+	public String getActionWord() { // this method extracts the command word from user input ignoring trailing &
 									// leading whitespaces
 		String[] tokens = _description.trim().split("\\s");
 		StringBuilder sb = new StringBuilder();
 		return sb.insert(0, tokens[0]).toString();
 	}
 
-	public void processCommand(String cmdKey) { // This method matches the
-												// userinput w the predefined
-												// system fn and execute it w
+	public void processCommand(String cmdKey) { // This method matches the userinput w the predefinedsystem fn and execute it w
 												// respective feedback returned
 		switch (cmdKey) {
 		case COMMAND_ADD:

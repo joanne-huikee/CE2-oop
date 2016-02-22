@@ -36,11 +36,12 @@ public class FileEditor {
 
 	/******************************************************************************************************/
 
-	public FileEditor(File file) {   //constructor of FileEditor obj
+	public FileEditor(File file) { // constructor of FileEditor obj
 		_userFile = file;
 	}
 
-	public void write(String input) {   //This method appends a new line given into existing file
+	public void write(String input) { // This method appends a new line given
+										// into existing file
 		try {
 			_fw = new FileWriter(_userFile, true);
 			_bw = new BufferedWriter(_fw);
@@ -59,7 +60,8 @@ public class FileEditor {
 		}
 	}
 
-	public void outputFileContent() {   //print content of textfile line by line w linenum
+	public void outputFileContent() { // print content of textfile line by line
+										// w linenum
 		String line = null;
 		int lineNum = COUNTER_START;
 		try {
@@ -81,7 +83,8 @@ public class FileEditor {
 		}
 	}
 
-	public Vector<String> readAndStore() {          //store content in textfile line by line into string vector
+	public Vector<String> readAndStore() { // store content in textfile line by
+											// line into string vector
 		Vector<String> temp = new Vector<String>();
 		String line = null;
 		try {
@@ -103,13 +106,13 @@ public class FileEditor {
 		temp.add(line);
 	}
 
-	public String deleteLine(Vector<String> temp, int num) {  //remove line specified from string vector
+	public String deleteLine(Vector<String> temp, int num) {   //remove line specified from string vector
 		String deletedLine = temp.get(num - 1);
 		temp.remove(num - 1);
 		return deletedLine;
 	}
 
-	public void appendVectorToFile(Vector<String> temp) {     //append contents of string vector back to an empty file
+	public void appendVectorToFile(Vector<String> temp) { // append contents of string vector back to an empty file
 		Iterator<String> i = temp.iterator();
 		try {
 			_fw = new FileWriter(_userFile, false);
@@ -157,12 +160,12 @@ public class FileEditor {
 		return temp;
 	}
 
-	public void getLinesContainSearched(String line, int lineNum, Vector<String> temp, String searchInput)
-			throws IOException {
+	public void getLinesContainSearched(String line, int lineNum, Vector<String> temp, String searchInput) throws IOException {
 		while ((line = _br.readLine()) != null) {
 			lineNum++;
 			if (Pattern.compile(Pattern.quote(searchInput), Pattern.CASE_INSENSITIVE).matcher(line).find()) {
-				storeToTemp(temp, lineNum + ". " + line);    //find line containing search word regardless of letter casing and store to vector
+				storeToTemp(temp, lineNum + ". " + line); // find line containing search word regardless of letter casing
+															// and store to vector
 			}
 		}
 	}
