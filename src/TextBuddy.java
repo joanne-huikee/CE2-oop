@@ -43,7 +43,7 @@ public class TextBuddy {
 	 * private attributes of main TextBuddy class. This main class is like an UI
 	 * which initiates the program, deals with user input and show feedback to
 	 * user
-	 ************************/
+	 *****************************************************************************/
 
 	private static String _fileName;
 	private static File _userFile;
