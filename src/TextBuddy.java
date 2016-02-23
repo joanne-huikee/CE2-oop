@@ -6,7 +6,7 @@ import java.util.Scanner;
  * 
  * @author Joanne
  * 
- *         CS2103 CE2 This is th main class used for editing a given
+ *         CS2103 CE2 This is the main class used for editing a given
  *         parameter(textfile) based on user command. The commands available for
  *         TextBuddy are add, delete, display, clear, search and sort. 
  *         add <string>: appends a new string(all the words following the add command)to the text file 
