@@ -94,7 +94,6 @@ public class Command {
 
 	public String executeAdd() {
 		String userInput = getInputMsg();
-		_myEditor = new FileEditor(TextBuddy.getUserFile());
 		String feedbackMsg = checkValidAddition(userInput);
 		return feedbackMsg;
 	}
@@ -108,6 +107,7 @@ public class Command {
 		if (userInput.isEmpty()) {
 			return MESSAGE_EMPTY_ADD;
 		} else {
+			_myEditor = new FileEditor(TextBuddy.getUserFile());
 			_myEditor.write(userInput);
 			return String.format(MESSAGE_ADD, TextBuddy.getFileName(), userInput);
 		}
@@ -120,7 +120,6 @@ public class Command {
 	}
 
 	public String executeDelete() {
-		_myEditor = new FileEditor(TextBuddy.getUserFile());
 		int x = getLineNumForDel();
 		String feedbackMsg = checkValidDel(x);
 		return feedbackMsg;
@@ -141,6 +140,7 @@ public class Command {
 		if (isEmpty(TextBuddy.getUserFile())) {
 			return String.format(MESSAGE_EMPTY_DELETION, TextBuddy.getFileName());
 		} else {
+			_myEditor = new FileEditor(TextBuddy.getUserFile());
 			Vector<String> storage = _myEditor.readAndStore();
 			return checkDelLineExist(storage, num);
 		}
