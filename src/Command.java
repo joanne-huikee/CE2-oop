@@ -10,6 +10,8 @@ import java.util.Vector;
 public class Command {
 
 	private static final int EMPTY_FILE_COUNTER = 0;
+	private static final int COUNTER_START = 0;
+	private static final int COUNTER_INVALID = -1;
 	private static final int ARGS_PARAM = 0;
 	private static final String MESSAGE_INVALID_COMMAND = "This is an invalid command. Pls re-enter command.";
 	private static final String MESSAGE_EMPTY_ADD = "Invalid command. Nothing specified for addition";
@@ -51,15 +53,13 @@ public class Command {
 		processCommand(cmdKey);
 	}
 
-	public String getActionWord() { // this method extracts the command word from user input ignoring trailing &
-									// leading whitespaces
+	public String getActionWord() { // this method extracts the command word from user input ignoring trailing & leading whitespaces
 		String[] tokens = _description.trim().split("\\s");
 		StringBuilder sb = new StringBuilder();
 		return sb.insert(0, tokens[0]).toString();
 	}
 
-	public void processCommand(String cmdKey) { // This method matches the userinput w the predefinedsystem fn and execute it w
-												// respective feedback returned
+	public void processCommand(String cmdKey) { // This method matches the userinput w the predefinedsystem fn and execute it w respective feedback returned
 		switch (cmdKey) {
 		case COMMAND_ADD:
 			String feedbackOfAdd = executeAdd();
@@ -126,15 +126,15 @@ public class Command {
 		return feedbackMsg;
 	}
 
-	public int getLineNumForDel() {
-		int num = 0;
+	public int getLineNumForDel() {  //extract linenum(int) from a string
+		int num = COUNTER_START;
 		try {
 			num = Integer.parseInt(getInputMsg());
 			return num;
 		} catch (NumberFormatException ex) {
 			TextBuddy.printFeedback(MESSAGE_NUM_ERROR);
 		}
-		return -1;
+		return COUNTER_INVALID;   //return invalid counter to indicate num format exception
 	}
 
 	public String checkValidDel(int num) {
