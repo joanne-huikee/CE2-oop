@@ -7,7 +7,7 @@ import org.junit.Test;
 public class CommandTest {
 
 	@Test
-	public void testGetActionWord() {
+	public void testGetActionWord() {  //check if return first word correctly
 		Command cmdObj = new Command("add abcef");
 		Command cmdObj2 = new Command("delete hello i sucks right");
 		Command cmdObj3 = new Command("clear bobobo");
@@ -20,7 +20,7 @@ public class CommandTest {
 	}
 
 	@Test
-	public void testExecuteAdd() {
+	public void testExecuteAdd() { //check if return right feedback msg
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();
@@ -35,7 +35,7 @@ public class CommandTest {
 	}
 
 	@Test
-	public void testGetInputMsg() {
+	public void testGetInputMsg() {  //check if extract input msg w/o command word correctly
 		Command cmdObj = new Command("add lalala");
 		Command cmdObj2 = new Command("add hello wru");
 		Command cmdObj3 = new Command("search xoxo");
@@ -47,7 +47,7 @@ public class CommandTest {
 	}
 
 	@Test
-	public void testExecuteDelete() {
+	public void testExecuteDelete() {   //check if return right status msg
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();
@@ -60,7 +60,7 @@ public class CommandTest {
 	}
 
 	@Test
-	public void testGetLineNumForDel() {
+	public void testGetLineNumForDel() {  //check if return correct int num from string, return -1 when invalid num format
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();
@@ -84,7 +84,7 @@ public class CommandTest {
 
 
 	@Test
-	public void testExecuteClear() {
+	public void testExecuteClear() { //check if return right status msg
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();
@@ -97,7 +97,7 @@ public class CommandTest {
 	}
 
 	@Test
-	public void testExecuteSort() {
+	public void testExecuteSort() {  //check if return correct clear feedback
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();

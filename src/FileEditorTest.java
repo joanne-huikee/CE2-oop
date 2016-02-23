@@ -7,7 +7,7 @@ import org.junit.Test;
 public class FileEditorTest {
 
 	@Test
-	public void testReadAndStore() {
+	public void testReadAndStore() { //check if stores string into vector correctly
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
 		TextBuddy.openFile();
@@ -22,7 +22,7 @@ public class FileEditorTest {
 	}
 	
 	@Test
-	public void testDeleteLine() {
+	public void testDeleteLine() {  //check if line to be deleted is correct
 		Vector<String> test = new Vector<String>();
 		test.add("abcgdj");
 		test.add("fngjgkg");

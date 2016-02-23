@@ -7,14 +7,14 @@ import org.junit.Test;
 public class TextBuddyTest {
 
 	@Test
-	public void testGetFileName() {
+	public void testGetFileName() { //check if return correct filename
 		String[] args = {"hello.txt"};
 		TextBuddy.setFileName(args);
 		assertEquals("hello.txt", TextBuddy.getFileName());
 	}
 	
 	@Test
-	public void testGetUserFile() {
+	public void testGetUserFile() { //check if return correct file
 		File file = new File("mytestfile.txt");
 		String[] args = {"mytestfile.txt"};
 		TextBuddy.setFileName(args);
@@ -24,7 +24,7 @@ public class TextBuddyTest {
 
 
 	@Test
-	public void testIsNullArg() {
+	public void testIsNullArg() { //check if return appropriate arg length
 		String[] args = {"hello.txt"};
 		assertFalse(TextBuddy.isNullArg(args));
 		String[] args2 = {};
